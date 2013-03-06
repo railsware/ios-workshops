@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Objective-C Introduction</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script type="text/javascript">
+var SLIDE_CONFIG = {
+  // Slide settings
+  settings: {
+    title: 'Objective-C',
+    subtitle: 'Introduction',
+    useBuilds: true, // Default: true. False will turn off slide animation builds.
+    usePrettify: true, // Default: true
+    enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.
+    enableTouch: true, // Default: true. If touch support should enabled. Note: the device must support touch.
+    //analytics: 'UA-XXXXXXXX-1', // TODO: Using this breaks GA for some reason (probably requirejs). Update your tracking code in template.html instead.
+    favIcon: '',
+    fonts: [
+      'Open Sans:regular,semibold,italic,italicsemibold',
+      'Inconsolata'
+    ],
+    //theme: ['mytheme'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
+  },
+
+  // Author information
+  presenters: [{
+    name: 'Sergii Boiko',
+    company: 'Software Engineer, Railsware',
+    twitter: '@criskiev',
+    www: 'http://railsware.com',
+    github: 'http://github.com/cris',
+    slides: 'http://github.com/cris/objective-c-introduction-2013'
+  }/*, {
+    name: 'Second Name',
+    company: 'Job Title, Google',
+    gplus: 'http://plus.google.com/1234567890',
+    twitter: '@yourhandle',
+    www: 'http://www.you.com',
+    github: 'http://github.com/you'
+  }*/]
+};
+</script>
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+  <style>
+    span.highlight {background-color: #fff600;}
+  </style>
+</head>
+<body style="opacity: 0">
+
+
+<slides class="layout-widescreen">
+
+  <!--
+  <slide class="segue dark quote nobackground">
+    <article class="flexbox auto-fadein vcenter">
+      <q>Does it Scale?</q>
+    </article>
+  </slide>
+
+  <slide class="segue dark quote nobackground">
+    <article class="flexbox auto-fadein vcenter">
+      <q>Does it <span style="text-decoration: line-through;">Scale</span> ThreadSafe?</q>
+    </article>
+  </slide>
+  -->
+
+  <slide class="title-slide segue nobackground">
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+      <br>
+      <br>
+      <br>
+      <br>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>History</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Created by Brad Cox &amp; Tom Love in 1980</li>
+        <li>Main idea: create language fully compatible with C and having Smalltalk-like OOP-model</li>
+        <li>In 1988 year it was licensed by NeXT</li>
+        <li>Currently Objective-C holds 3-rd position in TIOBE rating due to IOS success</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Objective-C for Ruby guys: Eagle-eye view</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Same OOP model: classes, methods, attributes/properties, messaging</li>
+        <li>Rich introspection capabilities: object knows everything about itself</li>
+        <li>Mostly, C-style control structures</li>
+        <li>Poor-man C-style booleans(0 - false, !0 - true)</li>
+        <li>Very dynamic and even with duck-typing, but use static typing a lot</li>
+        <li>Refinements and mixins</li>
+        <li>Blocks</li>
+        <li>Memory management requires some effort, but not as much as in plain C, especially with ARC</li>
+        <li>Exceptions present, but discoraged to use due to memory management issues</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: sending message to object</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// calling without params
+// Ruby: now = NSDate.date
+NSDate *now = [NSDate date];
+
+// calling with one param
+// Ruby: later = now.date_by_adding_time_interval(100000)
+NSDate *later = [now dateByAddingTimeInterval:100000];
+
+// many params
+// Ruby: content = NSString.string_with_contents_of_file("/etc/hosts",
+//                                                       encoding: "utf8", error: nil)
+NSString *content = [NSString stringWithContentsOfFile:@"/etc/hosts"
+                                              encoding:NSUTF8StringEncoding
+                                                 error:nil];
+// selector(aka method-name):
+//   stringWithContentsOfFile:encoding:error:
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: sending message to object</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Dispatching is dynamic and proceeds in runtime<br>(not at the compile time like in C/C++ or Java)</li>
+        <li>Object can call appropriate method</li>
+        <li>Forward call to another object(ala method-missing in Ruby)</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: classes and objects</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Class has instance and class methods(~ in Ruby)</li>
+        <li>Setters and getters can be auto-generated(~ in Ruby attr_*)</li>
+        <li>All methods are public(!~ in Ruby)</li>
+        <li>Object instance variables are accessible only via methods(~ in Ruby)</li>
+        <li>There are objects and primitive types from C-part of language(!~ in Ruby)</li>
+        <li>Definition of class-interface and implementation are splited in .h and .m files(!~ in Ruby: everything in .rb)</li>
+        <li>Instance variables should be explicitly declared(!~ in Ruby)</li>
+        <li>Object creation and initialization are splited(!~ in Ruby, but can be implemented)</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: classes and objects</h2>
+    </hgroup>
+    <article>
+<table>
+<tr>
+<td width="48%">
+<pre class="prettyprint" data-lang="objective-c">
+// HelloWorld.h file
+#import &lt;Foundation/Foundation.h&gt;
+
+@interface HelloWorld : NSObject {
+    NSString *name;
+}
+
++ (void)sayHelloToEverybody;
+
+- (id)initWithName:(NSString *)aName;
+
+@property NSString *name;
+
+- (void)sayHello;
+
+@end
+
+
+</pre>
+</td>
+<td width="48%">
+<pre class="prettyprint" data-lang="objective-c">
+// HelloWorld.m file
+#import "HelloWorld.h"
+@implementation HelloWorld
++ (void)sayHelloToEverybody {
+    NSLog(@"Hello Everybody!");
+}
+- (id)initWithName:(NSString *)aName {
+    self = [super init];
+    name = aName;
+    return self;
+}
+@synthesize name;
+
+- (void)sayHello {
+    NSLog(@"Hello %@", name);
+}
+@end
+</pre>
+</td>
+</tr>
+</table>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: object creation</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// simplest case
+NSString *message = [[NSString alloc] init];
+
+// shortcut
+NSString *message = [NSString new];
+
+// real use case
+NSString *message = [[NSString alloc] initWithCString:"C Forever!"
+                                             encoding:NSUTF8StringEncoding];
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: nil - black-hole "object"</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// NullPointerException isn't an issue in Objective-C
+[nil anyPieceOfCrapDoesntMakeMeFail];
+
+// nil is a DieHard object
+[nil iDontAfraidAnyOfYourMessage:@"Even this one!"];
+
+if (someObject != nil) {
+    NSLog(@"Objective-C doesn't need such code...");
+    [someObject doSomething];
+}
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: nil, NULL, NSNull</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// nil and NULL implemented via C-define macros
+// can't be placed into Objective-C collections
+if (nil == NULL &amp;&amp; 0 == nil) {
+    NSLog(@"That's true");
+}
+
+// [NSNull null]
+// can be used in Objective-C collections
+if ([NSNull null] == nil) {
+    NSLog(@"That's impossible!");
+}
+
+</pre>
+<p> This weirdness is a price for fluent integration with C</p>
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>Flow-control and cycles</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>All standard statements from C: if/else, for, while, do/while, switch/case</li>
+        <li>for-in aka Fast Enumeration</li>
+      </ul>
+    </article>
+<pre class="prettyprint" data-lang="objective-c">
+NSArray *people = [NSArray arrayWithObjects:@"Kate", @"Peter", @"Mason", nil];
+// old boring for
+for (int i=0; i &lt; [people count]; i++) {
+    NSLog(@"And the winner is: %@", [people objectAtIndex:i]);
+}
+
+// new-fashion for-in
+for (NSString *name in people) {
+    NSLog(@"And the winner is: %@", name);
+}
+
+</pre>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Booleans in conditionals</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Everything inherited from C</li>
+        <li>0 == NO - false value</li>
+        <li>1 == YES and everything !0 - true value</li>
+        <li>Not true OO-boolean, like true/false objects in Ruby</li>
+      </ul>
+    </article>
+<pre class="prettyprint" data-lang="objective-c">
+// YES and NO - are C defines for 1 and 0
+if (YES) {
+    NSLog(@"Yes, I know it!");
+} else if (NO) {
+    NSLog(@"It's unlikely to happen");
+}
+
+if ([NSNull null]) {
+    NSLog(@"I'm true! Not like in your Ruby");
+}
+</pre>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: Protocols</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Same as Java-interfaces</li>
+        <li>Mostly used for delegate-objects</li>
+        <li>Should pass compile-time check</li>
+      </ul>
+<pre class="prettyprint" data-lang="objective-c">
+// File: RWEngeneering.h
+@protocol RWEngeneering
+@required
+- (RWSolution *)findSolutionForIssue(ProductionIssue *)issue;
+- (NSDate *)estimateScope:(Scope *)scope;
+@optional
+- (Fun *)rideSnowboardAt(Place *):place;
+@end
+
+// File: RWEngineer.h
+@interface RWEngineer : Engineer &lt;RWEngeneering&gt;
+// ...
+@end
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Duck-typing</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// duck typing
+if ([myObject respondsToSelector:@selector(someMethodThatMightBeMissing:)]) {
+    NSLog(@"I have this method");
+} else {
+    NSLog(@"Doesn't have this method");
+}
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>OOP: Categories</h2>
+    </hgroup>
+    <article>
+        <p>Mixins and Refinements in one bottle</p>
+<pre class="prettyprint" data-lang="objective-c">
+// NSString+JSON.h
+@interface NSString (JSON)
+- (JSON *)parseJSON;
+@end
+// NSString+JSON.m
+@implementation NSString (JSON)
+- (JSON *)parseJSON {
+    // ...
+}
+@end
+// main.m
+#import "NSString+JSON"
+int main(int argc, const char *argv) {
+   JSON *json = [@"{\"pi\": 3.14}", parseJSON];
+   //...
+}
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Memory Management</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Manual for C: malloc/free</li>
+        <li>Manual Reference Counting: retain/release/autorelease [old school]</li>
+        <li>Garbage Collection [Mac OS only]</li>
+        <li>Automatic Reference Counting(ARC) <br>[Mac OS X v10.6 and v10.7 (64-bit applications) and for iOS 4 and iOS 5]</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Manual Reference Counting</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// Item.m
+- (void)setName:(NSString *)newName {
+    [newName retain];
+    [name release];
+    name = newName;
+}
+- (NSString *)description {
+    NSString *message = [NSString stringWithFormat:@"My name is: %@", name];
+    [message autorelease];
+    return message;
+}
+// main.m
+int main(int argc, const char *argv) {
+    @autoreleasepool {
+        Item *item = [[Item new] setName:@"Alfred"];
+        NSLog(@"What is you name? %@", item);
+    }
+}
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Automatic Reference Counting</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Fully compatible with manual RC</li>
+        <li>Simplify a lot all memory management stuff</li>
+      </ul>
+<pre class="prettyprint" data-lang="objective-c">
+Foo *foo = [[Foo alloc] init];
+[foo something];
+// memore leak here...
+// should have:
+// [foo release];
+// but Clang did this stuff for you with enabled ARC
+return;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Blocks</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Inspired by Ruby and Smalltalk</li>
+        <li>Work like a closure</li>
+        <li>Due to a static-side of Objective-C require type declaration</li>
+      </ul>
+<pre class="prettyprint" data-lang="objective-c">
+void (^simpleBlock)(void);
+simpleBlock = ^{
+    NSLog(@"This is a block");
+};
+simpleBlock();
+
+int a = 3;
+int (^incrementA)(int) = ^(int increment) {
+    a += increment;
+    return a;
+}
+incrementA(4);
+NSLog(@"Now a is: %d", a); // 7
+</pre>
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>New bright features: Literals</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// was
+NSArray *myArray = [NSArray arrayWithObject:someObject];
+NSDictionary *myDictionary = [NSDictionary dictionaryWithObject:someObject forKey:@"key"];
+NSNumber *myNumber = [NSNumber numberWithInt:333];
+
+// became
+NSArray *myArray = @[ someObject ];
+NSDictionary *myDictionary = @{ @"key" : someObject };
+NSNumber *myNumber = @333;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>New bright features: Subscripting</h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+// was
+id object1 = [someArray objectAtIndex:0];
+id object2 = [someDictionary objectForKey:@"key"];
+[someMutableArray replaceObjectAtIndex:0 withObject:object3];
+[someMutableDictionary setObject:object4 forKey:@"key"];
+
+// became
+id object1 = someArray[0];
+id object2 = someDictionary[@"key"];
+someMutableArray[0] = object3;
+someMutableDictionary[@"key"] = object4;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Objective-C: what's next</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Kernighan &amp; Ritchie "The C Programming Language"</li>
+        <li>Many good documentations at <a href="http://developer.apple.com">developer.apple.com</a></li>
+        <li>Aaron Hillegass "Objective-C Programming, The Big Nerd Ranch Guide"</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="thank-you-slide segue nobackground">
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;Thank You!&gt;</h2>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+      <!-- populated from slide_config.json -->
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+</slides>
+</body>
+</html>
