@@ -103,14 +103,13 @@ var SLIDE_CONFIG = {
     <article>		
 		<table>
 		<tr>
-		<td width="33%">
-			<img src="images/foundation/objc_foundation_A.jpg" />
-
+		<td width="25%">
+			<img src="images/foundation/objc_foundation_A.jpg"/>
 		</td>
-		<td width="33%">
+		<td width="25%">
 			<img src="images/foundation/objc_foundation2_A.jpg" />
 		</td>
-		<td width="33%">
+		<td width="25%">
 			<img src="images/foundation/objc_foundation3_A.jpg" />
 		</td>
 		</tr>
@@ -256,6 +255,42 @@ NSLog(@"%@", [NSString stringWithFormat:@"I'm %@, I'm %d", @"Bob", 18 ]);
           <li>NSDictionary & NSMutableDictionary</li>
           <li>NSSet & NSMutableSet</li>
         </ul>				
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Collections: NSArray & NSMutableArray</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSArray_Class/NSArray.html#//apple_ref/doc/uid/TP40003620">Documentation</a>	  
+    </hgroup>
+    <article>
+		<p  style="line-height:32px;">
+NSArray and its subclass NSMutableArray manage ordered collections of objects called arrays. NSArray creates static arrays, and NSMutableArray creates dynamic arrays. You can use arrays when you need an ordered collection of objects.
+		</p>		
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Collections: NSDictionary & NSMutableDictionary</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSDictionary_Class/Reference/Reference.html">Documentation</a>	  
+    </hgroup>
+    <article>
+		<p  style="line-height:32px;">
+The NSDictionary class declares the programmatic interface to objects that manage immutable associations of keys and values. Use this class or its subclass NSMutableDictionary when you need a convenient and efficient way to retrieve data associated with an arbitrary key. NSDictionary creates static dictionaries, and NSMutableDictionary creates dynamic dictionaries.
+		</p>		
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Collections: NSSet & NSMutableSet</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSSet_Class/Reference/Reference.html">Documentation</a>	  
+    </hgroup>
+    <article>
+		<p  style="line-height:32px;">
+NSSet declares the programmatic interface for static sets of distinct objects. You establish a static set’s entries when it’s created, and thereafter the entries can’t be modified. NSMutableSet, on the other hand, declares a programmatic interface for dynamic sets of distinct objects. A dynamic—or mutable—set allows the addition and deletion of entries at any time, automatically allocating memory as needed.
+		</p>		
     </article>
   </slide>
 
@@ -458,7 +493,7 @@ NSArray* checkErrorResults =  [PivotalObejctsFactory checkForError:responseData]
     </hgroup>
     <article>
 		<p style="line-height:32px;">
-NSNotification objects encapsulate information so that it can be broadcast to other objects by an NSNotificationCenter object. An NSNotification object (referred to as a notification) contains a name, an object, and an optional dictionary. The name is a tag identifying the notification.
+NSNotification objects encapsulate information so that it can be broadcast to other objects by an NSNotificationCenter object. An NSNotification object (referred to as a notification) contains a name, an object, and an optional dictionary. The name is a tag identifying the notification.skype
 		</p>
 		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
 //Register notification observer
