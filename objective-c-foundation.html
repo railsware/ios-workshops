@@ -84,183 +84,313 @@ var SLIDE_CONFIG = {
 
   <slide>
     <hgroup>
-      <h2>History</h2>
+      <h2>Foundation Framework</h2>
     </hgroup>
     <article>
-      <ul>
-        <li>Created by Brad Cox &amp; Tom Love in 1980</li>
-        <li>Main idea: create language fully compatible with C and having Smalltalk-like OOP-model</li>
-        <li>In 1988 year it was licensed by NeXT</li>
-        <li>Currently Objective-C holds 3-rd position in TIOBE rating due to IOS success</li>
-      </ul>
+	<p style="line-height:32px;">
+		Use the <a href="http://developer.apple.com/library/Mac/#documentation/Cocoa/Reference/Foundation/ObjC_classic/Intro/IntroFoundation.html">Foundation framework</a> for the "nuts and bolts" classes for Objective-C programming. This framework provides essential Objective-C classes. It includes classes for objects representing basic data types, collections, and operating-system services. 
+	</p>
+	<p style="line-height:32px;">
+		Foundation also introduces several design patterns and mechanisms that contribute to the robustness and efficiency of Objective-C programs. Along with UIKit, the Foundation framework provides the basic tools and infrastructure you need to implement graphical, event-driven iOS applications.
+	</p>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>Objective-C for Ruby guys: Eagle-eye view</h2>
+      <h2>Class Hierarhy 1</h2>
+    </hgroup>
+    <article>		
+		<table>
+		<tr>
+		<td width="33%">
+			<img src="images/foundation/objc_foundation_A.jpg" />
+
+		</td>
+		<td width="33%">
+			<img src="images/foundation/objc_foundation2_A.jpg" />
+		</td>
+		<td width="33%">
+			<img src="images/foundation/objc_foundation3_A.jpg" />
+		</td>
+		</tr>
+		</table>		
+    </article>
+  </slide>
+  <slide>
+    <hgroup>
+      <h2>NSObject</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html">Documentation</a>
     </hgroup>
     <article>
-      <ul>
-        <li>Same OOP model: classes, methods, attributes/properties, messaging</li>
-        <li>Rich introspection capabilities: object knows everything about itself</li>
-        <li>Mostly, C-style control structures</li>
-        <li>Poor-man C-style booleans(0 - false, !0 - true)</li>
-        <li>Very dynamic and even with duck-typing, but use static typing a lot</li>
-        <li>Refinements and mixins</li>
-        <li>Blocks</li>
-        <li>Memory management requires some effort, but not as much as in plain C, especially with ARC</li>
-        <li>Exceptions present, but discoraged to use due to memory management issues</li>
-      </ul>
+		<p style="line-height:32px;">
+			NSObject is the root class of most Objective-C class hierarchies. Through NSObject, objects inherit a basic interface to the runtime system and the ability to behave as Objective-C objects.
+		</p>
+        <ul style="line-height:20px; font-size:20px;">
+          <li>Initializing a Class </li>
+          <li>Creating, Copying, and Deallocating Objects(+alloc | -init | –copy | –dealloc)</li>
+          <li>Identifying Classes (+class | +superclass | +isSubclassOfClass:)</li>
+          <li>Testing Class Functionality (+instancesRespondToSelector:)</li>
+          <li>Testing Protocol Conformance (+conformsToProtocol:)</li>
+          <li>Obtaining Information About Methods</li>
+          <li>Describing Objects (+description)</li>
+          <li>Discardable Content Proxy Support</li>
+          <li>Sending Messages (performSelector:....)</li>
+          <li>Forwarding Messages </li>
+          <li>Dynamically Resolving Methods </li>		  
+		  <li>Error Handling (–doesNotRecognizeSelector:) </li>	
+		  <li>Archiving (serialisation) </li>	
+        </ul>		
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>OOP: sending message to object</h2>
+      <h2>NS(Something) not always NSObject</h2>
     </hgroup>
     <article>
-<pre class="prettyprint" data-lang="objective-c">
-// calling without params
-// Ruby: now = NSDate.date
-NSDate *now = [NSDate date];
+		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+			#if __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
+			typedef long NSInteger;
+			typedef unsigned long NSUInteger;
+			#else
+			typedef int NSInteger;
+			typedef unsigned int NSUInteger;
+			#endif
+		</pre>
+    </article>
+  </slide>
 
-// calling with one param
-// Ruby: later = now.date_by_adding_time_interval(100000)
-NSDate *later = [now dateByAddingTimeInterval:100000];
+  <slide>
+    <hgroup>
+      <h2>Mutable and Immutable</h2>
+    </hgroup>
+    <article>		
+		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+		    NSString* string  = [NSString string]; //Immutable string
+		    NSMutableString* newString1  = [NSString string];
+		    [newString1 insertString:@"Some string" atIndex:0]; // Exception, still immutable string
+		    NSMutableString* newString2  = [NSMutableString string];
+		    [newString2 insertString:@"Some string" atIndex:0]; // Correct
+		</pre>
+		
+		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+		    NSArray* array  = @[@"Mike", @"Dan"];
 
-// many params
-// Ruby: content = NSString.string_with_contents_of_file("/etc/hosts",
-//                                                       encoding: "utf8", error: nil)
-NSString *content = [NSString stringWithContentsOfFile:@"/etc/hosts"
-                                              encoding:NSUTF8StringEncoding
-                                                 error:nil];
-// selector(aka method-name):
-//   stringWithContentsOfFile:encoding:error:
+		    NSMutableArray* mutableArray  = [NSMutableArray arrayWithArray:array];
+		    [mutableArray insertObject:@"Alex" atIndex:0];			
+
+		    for (NSString* currentName in  mutableArray) {
+		        NSLog(@"%@",currentName);
+		    }
+		</pre>
+		
+    </article>
+  </slide>
+  <slide>
+    <hgroup>
+      <h2>Copy VS MutableCopy</h2>
+    </hgroup>
+    <article>		
+		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+			
+		    NSMutableArray* activeUsers = [NSMutableArray arrayWithObjects: @"Tom", @"Jack", nil];
+		    [activeUsers addObject:@"Mike"];
+		    NSLog(@"%@", activeUsers); // Tom, Jack, Mike
+    
+		    NSMutableArray* allUsers1 = [activeUsers copy];
+		    [allUsers1 addObject:@"Fred"]; // Exception -[__NSArrayI addObject:]: unrecognized selector sent...
+
+		    NSMutableArray* allUsers2 = [activeUsers mutableCopy];
+		    [allUsers2 addObject:@"Fred"];
+		    NSLog(@"%@", allUsers2); //  Tom, Jack, Mike, Fred
+		</pre>
+				
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+        <h2>NSString</h2>
+  	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/Reference/NSString.html#//apple_ref/doc/uid/TP40003744">Documentation</a>
+    </hgroup>
+    <article>
+		NSString
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>Collections</h2>
+    </hgroup>
+    <article>
+        <ul style="line-height:20px; font-size:20px;">
+          <li>NSArray & NSMutableArray</li>
+          <li>NSDictionary & NSMutableDictionary</li>
+          <li>NSSet & NSMutableSet</li>
+        </ul>				
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>NSEnumerator</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSEnumerator_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003654">Documentation</a>	  
+    </hgroup>
+    <article>
+		<p  style="line-height:32px;">
+NSEnumerator is an abstract class, instances of whose subclasses enumerate collections of other objects, such as arrays and dictionaries.
+		</p>
+		<p  style="line-height:32px;">
+All creation methods are defined in the collection classes—such as NSArray, NSSet, and NSDictionary—which provide special NSEnumerator objects with which to enumerate their contents. For example, NSArray has two methods that return an NSEnumerator object: objectEnumerator and reverseObjectEnumerator.
+		</p>
+<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+    NSArray* userNames = @[@"Ben", @"John", @"Ken"];
+	NSEnumerator* enumerator = [userNames objectEnumerator];
+	id object;
+	while ((object = [enumerator nextObject])) {
+	    // do something with object...
+	}
+	for(NSString* name in userNames) {
+    	NSLog(@"%@, ", name);
+	}
 </pre>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>OOP: sending message to object</h2>
+      <h2> Dates </h2>
+	  NSDate & NSCalendarDate & NSDateComponents & NSCalendar & NSTimeZone
+<a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSDate_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003641">Documentation</a>
     </hgroup>
     <article>
-      <ul>
-        <li>Dispatching is dynamic and proceeds in runtime<br>(not at the compile time like in C/C++ or Java)</li>
-        <li>Object can call appropriate method</li>
-        <li>Forward call to another object(ala method-missing in Ruby)</li>
-      </ul>
+		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+			@interface NSDate (Utilities) 			//NSDate+Utilities.h
+			-(NSDate*)normalizeForPivotalTracker;
+			@end
+			
+			@implementation NSDate (Utilities) 		//NSDate+Utilities.m
+			//Special normalization for the Pivoatl Example:2012/05/15 12:00:00 UTC to get 12:00:00 UTC
+			-(NSDate*)normalizeForPivotalTracker
+			{
+			    NSCalendar* currentCalendar = [NSCalendar currentCalendar];
+			    [currentCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+			    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
+			    NSDateComponents* dateComponents = [currentCalendar components:unitFlags fromDate:self];
+			    [dateComponents setHour:12];
+			    [dateComponents setMinute:0];
+			    [dateComponents setSecond:0];
+
+			    return [currentCalendar dateFromComponents:dateComponents];
+			}
+			@end			
+		</pre>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>OOP: classes and objects</h2>
+      <h2>NSTimer</h2>
+<a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSTimer_Class/Reference/NSTimer.html#//apple_ref/doc/uid/TP40003747">Documentation</a>	  
     </hgroup>
     <article>
-      <ul>
-        <li>Class has instance and class methods(~ in Ruby)</li>
-        <li>Setters and getters can be auto-generated(~ in Ruby attr_*)</li>
-        <li>All methods are public(!~ in Ruby)</li>
-        <li>Object instance variables are accessible only via methods(~ in Ruby)</li>
-        <li>There are objects and primitive types from C-part of language(!~ in Ruby)</li>
-        <li>Definition of class-interface and implementation are splited in .h and .m files(!~ in Ruby: everything in .rb)</li>
-        <li>Instance variables should be explicitly declared(!~ in Ruby)</li>
-        <li>Object creation and initialization are splited(!~ in Ruby, but can be implemented)</li>
-      </ul>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>OOP: classes and objects</h2>
-    </hgroup>
-    <article>
-<table>
-<tr>
-<td width="48%">
-<pre class="prettyprint" data-lang="objective-c">
-// HelloWorld.h file
-#import &lt;Foundation/Foundation.h&gt;
-
-@interface HelloWorld : NSObject {
-    NSString *name;
+        <ul>
+          <li>+scheduledTimerWithTimeInterval:target:selector:userInfo:repeats:</li>
+		  <li>–fire</li>
+		  <li>–invalidate</li>
+		  <li>–isValid</li>
+        </ul>		
+		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">			
+if (!_refreshTimer) {
+_refreshTimer = [NSTimer scheduledTimerWithTimeInterval:REFRESH_STORIES_LIST_TIMER 
+		                                         target:self
+		                                       selector:@selector(refreshStoriesListByTimer) 
+		                                       userInfo:nil 
+		                                        repeats:YES];
 }
+		</pre>
+    </article>
+  </slide>
 
-+ (void)sayHelloToEverybody;
+  <slide>
+    <hgroup>
+      <h2>Multi threading</h2>
+<a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html">Documentation</a>	  
+    </hgroup>
+    <article>
+      <ul>
+        <li>NSThread</li>
+		<li>NSOperation or NSBlockOperation + NSOperationQueue</li>
+		<li>NSObject methods</li>
+      </ul>
+    </article>
+  </slide>
 
-- (id)initWithName:(NSString *)aName;
+  <slide>
+    <hgroup>
+      <h2>Multi threading: NSThread</h2>
+<a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSThread_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003746">Documentation</a>	  
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+NSThread* myThread = [[NSThread alloc] initWithTarget:self
+	                                         selector:@selector(myThreadMainMethod:)
+	                                           object:nil];
+[myThread start];  // Actually create the thread
+</pre>
+<p  style="line-height:32px;">
+Note:
+An alternative to using the initWithTarget:selector:object: method is to subclass NSThread and override its main method. You would use the overridden version of this method to implement your thread’s main entry point. 
+</p>
+    </article>
+  </slide>
 
-@property NSString *name;
-
-- (void)sayHello;
-
+  <slide>
+    <hgroup>
+        <h2>Multi threading: NSOperation + NSOperationQueue</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/NSOperation_class/Reference/Reference.html#//apple_ref/doc/uid/TP40004591">Documentation</a>	  
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+@interface AuthOperation : NSOperation 
++(AuthOperation*)operationWithUser:(PivotalUser*) user 
+                          delegate:(NSObject<PivotalOperationDelegate>*) delegate;
 @end
 
-
-</pre>
-</td>
-<td width="48%">
-<pre class="prettyprint" data-lang="objective-c">
-// HelloWorld.m file
-#import "HelloWorld.h"
-@implementation HelloWorld
-+ (void)sayHelloToEverybody {
-    NSLog(@"Hello Everybody!");
-}
-- (id)initWithName:(NSString *)aName {
-    self = [super init];
-    name = aName;
-    return self;
-}
-@synthesize name;
-
-- (void)sayHello {
-    NSLog(@"Hello %@", name);
-}
+@implementation  AuthOperation
+...
+-(void)main {[_delegate performSelectorOnMainThread:@selector(doSomething:) 
+                                         withObject:operationInfo 
+                                      waitUntilDone:NO];
+ }
+...
 @end
-</pre>
-</td>
-</tr>
-</table>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>OOP: object creation</h2>
-    </hgroup>
-    <article>
-<pre class="prettyprint" data-lang="objective-c">
-// simplest case
-NSString *message = [[NSString alloc] init];
-
-// shortcut
-NSString *message = [NSString new];
-
-// real use case
-NSString *message = [[NSString alloc] initWithCString:"C Forever!"
-                                             encoding:NSUTF8StringEncoding];
+...
+NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
+[operationQueue setMaxConcurrentOperationCount:count];
+[operationQueue addOperation: [AuthOperation operationWithUser:_user 
+                                                      delegate:self]];
 </pre>
     </article>
   </slide>
 
   <slide>
     <hgroup>
-      <h2>OOP: nil - black-hole "object"</h2>
+        <h2>Multi threading: NSObject</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html#//apple_ref/occ/cl/NSObject">Documentation</a>
     </hgroup>
     <article>
-<pre class="prettyprint" data-lang="objective-c">
-// NullPointerException isn't an issue in Objective-C
-[nil anyPieceOfCrapDoesntMakeMeFail];
+<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+- (void)callingMethod {
+    NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSNumber numberWithInteger:pageIndex], @"pageIndex",
+                            [NSNumber numberWithBool:firstCase], @"firstCase",
+                            nil];
 
-// nil is a DieHard object
-[nil iDontAfraidAnyOfYourMessage:@"Even this one!"];
-
-if (someObject != nil) {
-    NSLog(@"Objective-C doesn't need such code...");
-    [someObject doSomething];
+    [self performSelectorInBackground:@selector(reloadPageWrapper:)
+                           withObject:args];
 }
 </pre>
     </article>
@@ -268,302 +398,28 @@ if (someObject != nil) {
 
   <slide>
     <hgroup>
-      <h2>OOP: nil, NULL, NSNull</h2>
+      <h2>NSURL and firendly classes</h2>
     </hgroup>
     <article>
-<pre class="prettyprint" data-lang="objective-c">
-// nil and NULL implemented via C-define macros
-// can't be placed into Objective-C collections
-if (nil == NULL &amp;&amp; 0 == nil) {
-    NSLog(@"That's true");
-}
+		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+NSMutableURLRequest* urlRequest = [[[NSMutableURLRequest alloc] initWithURL: 
+                                                       [NSURL URLWithString: AUTH_URL]] autorelease];    
+    
+NSData* plainTextData = [[NSString stringWithFormat:@"%@:%@", self.user.login, self.user.password] 
+		                               dataUsingEncoding:NSUTF8StringEncoding];    
+NSString* basicAuthToken = [plainTextData base64EncodedString];
+urlRequest setValue:basicAuthToken forHTTPHeaderField:@"Authorization: Basic"];
 
-// [NSNull null]
-// can be used in Objective-C collections
-if ([NSNull null] == nil) {
-    NSLog(@"That's impossible!");
-}
-
-</pre>
-<p> This weirdness is a price for fluent integration with C</p>
-    </article>
-  </slide>
-
-
-  <slide>
-    <hgroup>
-      <h2>Flow-control and cycles</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>All standard statements from C: if/else, for, while, do/while, switch/case</li>
-        <li>for-in aka Fast Enumeration</li>
-      </ul>
-    </article>
-<pre class="prettyprint" data-lang="objective-c">
-NSArray *people = [NSArray arrayWithObjects:@"Kate", @"Peter", @"Mason", nil];
-// old boring for
-for (int i=0; i &lt; [people count]; i++) {
-    NSLog(@"And the winner is: %@", [people objectAtIndex:i]);
-}
-
-// new-fashion for-in
-for (NSString *name in people) {
-    NSLog(@"And the winner is: %@", name);
-}
-
-</pre>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Booleans in conditionals</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>Everything inherited from C</li>
-        <li>0 == NO - false value</li>
-        <li>1 == YES and everything !0 - true value</li>
-        <li>Not true OO-boolean, like true/false objects in Ruby</li>
-      </ul>
-    </article>
-<pre class="prettyprint" data-lang="objective-c">
-// YES and NO - are C defines for 1 and 0
-if (YES) {
-    NSLog(@"Yes, I know it!");
-} else if (NO) {
-    NSLog(@"It's unlikely to happen");
-}
-
-if ([NSNull null]) {
-    NSLog(@"I'm true! Not like in your Ruby");
-}
-</pre>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>OOP: Protocols</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>Same as Java-interfaces</li>
-        <li>Mostly used for delegate-objects</li>
-        <li>Should pass compile-time check</li>
-      </ul>
-<pre class="prettyprint" data-lang="objective-c">
-// File: RWEngeneering.h
-@protocol RWEngeneering
-@required
-- (RWSolution *)findSolutionForIssue(ProductionIssue *)issue;
-- (NSDate *)estimateScope:(Scope *)scope;
-@optional
-- (Fun *)rideSnowboardAt(Place *):place;
-@end
-
-// File: RWEngineer.h
-@interface RWEngineer : Engineer &lt;RWEngeneering&gt;
-// ...
-@end
+// Request data
+NSError* requestError = nil;
+NSURLResponse* urlResponse = nil;
+NSData* responseData = [NSURLConnection sendSynchronousRequest:urlRequest 
+		                                     returningResponse:&urlResponse 
+		                                                 error:&requestError];
+//Prepare output
+NSArray* checkErrorResults =  [PivotalObejctsFactory checkForError:responseData];		
 </pre>
     </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Duck-typing</h2>
-    </hgroup>
-    <article>
-<pre class="prettyprint" data-lang="objective-c">
-// duck typing
-if ([myObject respondsToSelector:@selector(someMethodThatMightBeMissing:)]) {
-    NSLog(@"I have this method");
-} else {
-    NSLog(@"Doesn't have this method");
-}
-</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>OOP: Categories</h2>
-    </hgroup>
-    <article>
-        <p>Mixins and Refinements in one bottle</p>
-<pre class="prettyprint" data-lang="objective-c">
-// NSString+JSON.h
-@interface NSString (JSON)
-- (JSON *)parseJSON;
-@end
-// NSString+JSON.m
-@implementation NSString (JSON)
-- (JSON *)parseJSON {
-    // ...
-}
-@end
-// main.m
-#import "NSString+JSON"
-int main(int argc, const char *argv) {
-   JSON *json = [@"{\"pi\": 3.14}", parseJSON];
-   //...
-}
-</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Memory Management</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>Manual for C: malloc/free</li>
-        <li>Manual Reference Counting: retain/release/autorelease [old school]</li>
-        <li>Garbage Collection [Mac OS only]</li>
-        <li>Automatic Reference Counting(ARC) <br>[Mac OS X v10.6 and v10.7 (64-bit applications) and for iOS 4 and iOS 5]</li>
-      </ul>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Manual Reference Counting</h2>
-    </hgroup>
-    <article>
-<pre class="prettyprint" data-lang="objective-c">
-// Item.m
-- (void)setName:(NSString *)newName {
-    [newName retain];
-    [name release];
-    name = newName;
-}
-- (NSString *)description {
-    NSString *message = [NSString stringWithFormat:@"My name is: %@", name];
-    [message autorelease];
-    return message;
-}
-// main.m
-int main(int argc, const char *argv) {
-    @autoreleasepool {
-        Item *item = [[Item new] setName:@"Alfred"];
-        NSLog(@"What is you name? %@", item);
-    }
-}
-</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Automatic Reference Counting</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>Fully compatible with manual RC</li>
-        <li>Simplify a lot all memory management stuff</li>
-      </ul>
-<pre class="prettyprint" data-lang="objective-c">
-Foo *foo = [[Foo alloc] init];
-[foo something];
-// memore leak here...
-// should have:
-// [foo release];
-// but Clang did this stuff for you with enabled ARC
-return;
-</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Blocks</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>Inspired by Ruby and Smalltalk</li>
-        <li>Work like a closure</li>
-        <li>Due to a static-side of Objective-C require type declaration</li>
-      </ul>
-<pre class="prettyprint" data-lang="objective-c">
-void (^simpleBlock)(void);
-simpleBlock = ^{
-    NSLog(@"This is a block");
-};
-simpleBlock();
-
-int a = 3;
-int (^incrementA)(int) = ^(int increment) {
-    a += increment;
-    return a;
-}
-incrementA(4);
-NSLog(@"Now a is: %d", a); // 7
-</pre>
-    </article>
-  </slide>
-
-
-  <slide>
-    <hgroup>
-      <h2>New bright features: Literals</h2>
-    </hgroup>
-    <article>
-<pre class="prettyprint" data-lang="objective-c">
-// was
-NSArray *myArray = [NSArray arrayWithObject:someObject];
-NSDictionary *myDictionary = [NSDictionary dictionaryWithObject:someObject forKey:@"key"];
-NSNumber *myNumber = [NSNumber numberWithInt:333];
-
-// became
-NSArray *myArray = @[ someObject ];
-NSDictionary *myDictionary = @{ @"key" : someObject };
-NSNumber *myNumber = @333;
-</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>New bright features: Subscripting</h2>
-    </hgroup>
-    <article>
-<pre class="prettyprint" data-lang="objective-c">
-// was
-id object1 = [someArray objectAtIndex:0];
-id object2 = [someDictionary objectForKey:@"key"];
-[someMutableArray replaceObjectAtIndex:0 withObject:object3];
-[someMutableDictionary setObject:object4 forKey:@"key"];
-
-// became
-id object1 = someArray[0];
-id object2 = someDictionary[@"key"];
-someMutableArray[0] = object3;
-someMutableDictionary[@"key"] = object4;
-</pre>
-    </article>
-  </slide>
-
-  <slide>
-    <hgroup>
-      <h2>Objective-C: what's next</h2>
-    </hgroup>
-    <article>
-      <ul>
-        <li>Kernighan &amp; Ritchie "The C Programming Language"</li>
-        <li>Many good documentations at <a href="http://developer.apple.com">developer.apple.com</a></li>
-        <li>Aaron Hillegass "Objective-C Programming, The Big Nerd Ranch Guide"</li>
-      </ul>
-    </article>
-  </slide>
-
-  <slide class="thank-you-slide segue nobackground">
-    <article class="flexbox vleft auto-fadein">
-      <h2>&lt;Thank You!&gt;</h2>
-    </article>
-    <p class="auto-fadein" data-config-contact>
-      <!-- populated from slide_config.json -->
-    </p>
   </slide>
 
   <slide class="backdrop"></slide>
