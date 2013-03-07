@@ -150,16 +150,36 @@ var SLIDE_CONFIG = {
     </hgroup>
     <article>
 		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
-			#if __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
-			typedef long NSInteger;
-			typedef unsigned long NSUInteger;
-			#else
-			typedef int NSInteger;
-			typedef unsigned int NSUInteger;
-			#endif
+#if __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
 		</pre>
     </article>
   </slide>
+  
+  
+  <slide>
+    <hgroup>
+      <h2>NSNumber</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSNumber_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003704">Documentation</a>	  	  
+    </hgroup>
+    <article>
+<p  style="line-height:32px;">
+NSNumber is a subclass of NSValue that offers a value as any C scalar (numeric) type. It defines a set of methods specifically for setting and accessing the value as a signed or unsigned char, short int, int, long int, long long int, float, or double or as a BOOL.
+</p>
+
+		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+// Usage example 
+NSNumber* projectId = [NSNumber numberWithInteger:_story.projectId];
+[projectId integerValue];
+</pre>
+    </article>
+  </slide>
+
 
   <slide>
     <hgroup>
@@ -167,22 +187,22 @@ var SLIDE_CONFIG = {
     </hgroup>
     <article>		
 		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
-		    NSString* string  = [NSString string]; //Immutable string
-		    NSMutableString* newString1  = [NSString string];
-		    [newString1 insertString:@"Some string" atIndex:0]; // Exception, still immutable string
-		    NSMutableString* newString2  = [NSMutableString string];
-		    [newString2 insertString:@"Some string" atIndex:0]; // Correct
+NSString* string  = [NSString string]; //Immutable string
+NSMutableString* newString1  = [NSString string];
+[newString1 insertString:@"Some string" atIndex:0]; // Exception, still immutable string
+NSMutableString* newString2  = [NSMutableString string];
+[newString2 insertString:@"Some string" atIndex:0]; // Correct
 		</pre>
 		
 		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
-		    NSArray* array  = @[@"Mike", @"Dan"];
+NSArray* array  = @[@"Mike", @"Dan"];
 
-		    NSMutableArray* mutableArray  = [NSMutableArray arrayWithArray:array];
-		    [mutableArray insertObject:@"Alex" atIndex:0];			
+NSMutableArray* mutableArray  = [NSMutableArray arrayWithArray:array];
+[mutableArray insertObject:@"Alex" atIndex:0];			
 
-		    for (NSString* currentName in  mutableArray) {
-		        NSLog(@"%@",currentName);
-		    }
+for (NSString* currentName in  mutableArray) {
+    NSLog(@"%@",currentName);
+}
 		</pre>
 		
     </article>
@@ -193,17 +213,17 @@ var SLIDE_CONFIG = {
     </hgroup>
     <article>		
 		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
-			
-		    NSMutableArray* activeUsers = [NSMutableArray arrayWithObjects: @"Tom", @"Jack", nil];
-		    [activeUsers addObject:@"Mike"];
-		    NSLog(@"%@", activeUsers); // Tom, Jack, Mike
-    
-		    NSMutableArray* allUsers1 = [activeUsers copy];
-		    [allUsers1 addObject:@"Fred"]; // Exception -[__NSArrayI addObject:]: unrecognized selector sent...
 
-		    NSMutableArray* allUsers2 = [activeUsers mutableCopy];
-		    [allUsers2 addObject:@"Fred"];
-		    NSLog(@"%@", allUsers2); //  Tom, Jack, Mike, Fred
+NSMutableArray* activeUsers = [NSMutableArray arrayWithObjects: @"Tom", @"Jack", nil];
+[activeUsers addObject:@"Mike"];
+NSLog(@"%@", activeUsers); // Tom, Jack, Mike
+
+NSMutableArray* allUsers1 = [activeUsers copy];
+[allUsers1 addObject:@"Fred"]; // Exception -[__NSArrayI addObject:]: unrecognized selector sent...
+
+NSMutableArray* allUsers2 = [activeUsers mutableCopy];
+[allUsers2 addObject:@"Fred"];
+NSLog(@"%@", allUsers2); //  Tom, Jack, Mike, Fred
 		</pre>
 				
     </article>
@@ -211,11 +231,18 @@ var SLIDE_CONFIG = {
 
   <slide>
     <hgroup>
-        <h2>NSString</h2>
-  	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/Reference/NSString.html#//apple_ref/doc/uid/TP40003744">Documentation</a>
+      <h2>NSString</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/Reference/NSString.html#//apple_ref/doc/uid/TP40003744">Documentation</a>	  	  
     </hgroup>
     <article>
-		NSString
+<p  style="line-height:32px;">
+The NSString class declares the programmatic interface for an object that manages immutable strings. An immutable string is a text string that is defined when it is created and subsequently cannot be changed. NSString is implemented to represent an array of Unicode characters, in other words, a text string.
+</p>
+
+<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+NSString* stringHello = @"Hello";
+NSLog(@"%@", [NSString stringWithFormat:@"I'm %@, I'm %d", @"Bob", 18 ]);
+</pre>
     </article>
   </slide>
   
@@ -245,15 +272,15 @@ NSEnumerator is an abstract class, instances of whose subclasses enumerate colle
 All creation methods are defined in the collection classes—such as NSArray, NSSet, and NSDictionary—which provide special NSEnumerator objects with which to enumerate their contents. For example, NSArray has two methods that return an NSEnumerator object: objectEnumerator and reverseObjectEnumerator.
 		</p>
 <pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
-    NSArray* userNames = @[@"Ben", @"John", @"Ken"];
-	NSEnumerator* enumerator = [userNames objectEnumerator];
-	id object;
-	while ((object = [enumerator nextObject])) {
-	    // do something with object...
-	}
-	for(NSString* name in userNames) {
-    	NSLog(@"%@, ", name);
-	}
+NSArray* userNames = @[@"Ben", @"John", @"Ken"];
+NSEnumerator* enumerator = [userNames objectEnumerator];
+id object;
+while ((object = [enumerator nextObject])) {
+    // do something with object...
+}
+for(NSString* name in userNames) {
+	NSLog(@"%@, ", name);
+}
 </pre>
     </article>
   </slide>
@@ -266,26 +293,26 @@ All creation methods are defined in the collection classes—such as NSArray, NS
     </hgroup>
     <article>
 		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
-			@interface NSDate (Utilities) 			//NSDate+Utilities.h
-			-(NSDate*)normalizeForPivotalTracker;
-			@end
-			
-			@implementation NSDate (Utilities) 		//NSDate+Utilities.m
-			//Special normalization for the Pivoatl Example:2012/05/15 12:00:00 UTC to get 12:00:00 UTC
-			-(NSDate*)normalizeForPivotalTracker
-			{
-			    NSCalendar* currentCalendar = [NSCalendar currentCalendar];
-			    [currentCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    
-			    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
-			    NSDateComponents* dateComponents = [currentCalendar components:unitFlags fromDate:self];
-			    [dateComponents setHour:12];
-			    [dateComponents setMinute:0];
-			    [dateComponents setSecond:0];
+@interface NSDate (Utilities) 			//NSDate+Utilities.h
+-(NSDate*)normalizeForPivotalTracker;
+@end
 
-			    return [currentCalendar dateFromComponents:dateComponents];
-			}
-			@end			
+@implementation NSDate (Utilities) 		//NSDate+Utilities.m
+//Special normalization for the Pivoatl Example:2012/05/15 12:00:00 UTC to get 12:00:00 UTC
+-(NSDate*)normalizeForPivotalTracker
+{
+    NSCalendar* currentCalendar = [NSCalendar currentCalendar];
+    [currentCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+
+    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
+    NSDateComponents* dateComponents = [currentCalendar components:unitFlags fromDate:self];
+    [dateComponents setHour:12];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+
+    return [currentCalendar dateFromComponents:dateComponents];
+}
+@end			
 		</pre>
     </article>
   </slide>
@@ -361,7 +388,8 @@ An alternative to using the initWithTarget:selector:object: method is to subclas
 
 @implementation  AuthOperation
 ...
--(void)main {[_delegate performSelectorOnMainThread:@selector(doSomething:) 
+-(void)main {
+	[_delegate performSelectorOnMainThread:@selector(doSomething:) 
                                          withObject:operationInfo 
                                       waitUntilDone:NO];
  }
@@ -398,7 +426,8 @@ NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
 
   <slide>
     <hgroup>
-      <h2>NSURL and firendly classes</h2>
+      <h2>NSURL + NSURL Request</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003752">Documentation</a>	  	  
     </hgroup>
     <article>
 		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
@@ -421,6 +450,90 @@ NSArray* checkErrorResults =  [PivotalObejctsFactory checkForError:responseData]
 </pre>
     </article>
   </slide>
+
+  <slide>
+    <hgroup>
+      <h2>NSNotification+NSNotificationCenter</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSNotification_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003700">Documentation</a>	  	  
+    </hgroup>
+    <article>
+		<p style="line-height:32px;">
+NSNotification objects encapsulate information so that it can be broadcast to other objects by an NSNotificationCenter object. An NSNotification object (referred to as a notification) contains a name, an object, and an optional dictionary. The name is a tag identifying the notification.
+		</p>
+		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+//Register notification observer
+[[NSNotificationCenter defaultCenter] addObserver:self 
+                                         selector:@selector(runFilter) 
+		                                     name:MESSAGE_UPDATE_STORIES_NUMBER 
+		                                   object:_searchField];
+//Broadcast message
+[[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_STORIES_NUMBER 
+                                                    object:self 
+                                                  userInfo:userInfo];
+//Remove observer
+[[NSNotificationCenter defaultCenter] removeObserver:self
+                                                name:NSTextDidChangeNotification
+                                              object:_descriptionTextView];
+
+		</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>NSUserDefaults</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSUserDefaults_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003764">Documentation</a>	  	  
+    </hgroup>
+    <article>
+<p  style="line-height:32px;">
+The NSUserDefaults class provides a programmatic interface for interacting with the defaults system. The defaults system allows an application to customize its behavior to match a user’s preferences.
+</p>
+
+		<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+// Write 
+[[NSUserDefaults standardUserDefaults] setInteger:projectId forKey:KEY_ACTIVE_PROJECT];        
+
+// Read 
+[[NSUserDefaults standardUserDefaults] integerForKey:KEY_ACTIVE_PROJECT];		
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>NSError</h2>
+  <a href="http://developer.apple.com/library/ios/#documentation/Cocoa/Reference/Foundation/Classes/NSError_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40003655">Documentation</a>	  	  
+    </hgroup>
+    <article>
+	<p  style="line-height:32px;">
+An NSError object encapsulates richer and more extensible error information than is possible using only an error code or error string. The core attributes of an NSError object are an error domain (represented by a string), a domain-specific error code and a user info dictionary containing application specific information.		
+	</p>
+	<pre class="prettyprint" data-lang="objective-c"  style="font-size:18px; font-weight:bold; line-height:21px;">
+- (NSArray *)nodesForXPath:(NSString *)xpath
+                namespaces:(NSDictionary *)namespaces
+		             error:(NSError **)error {
+...		
+    if (array == nil && error != nil) {
+       *error = [NSError errorWithDomain:@"com.google.GDataXML"
+                                    code:errorCode
+                                userInfo:errorInfo];
+    }
+...
+}
+	</pre>	
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>App for the workshop</h2>
+    </hgroup>
+    <article>
+		1Mln+ Twitter application without using iOS Twitter API.
+	</article>
+  </slide>
+
 
   <slide class="backdrop"></slide>
 
