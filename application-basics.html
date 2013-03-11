@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Application basics</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script type="text/javascript">
+var SLIDE_CONFIG = {
+  // Slide settings
+  settings: {
+    title: 'iOS application',
+    subtitle: 'Basics',
+    useBuilds: true, // Default: true. False will turn off slide animation builds.
+    usePrettify: true, // Default: true
+    enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.
+    enableTouch: true, // Default: true. If touch support should enabled. Note: the device must support touch.
+    favIcon: '',
+    fonts: [
+      'Open Sans:regular,semibold,italic,italicsemibold',
+      'Inconsolata'
+    ],
+    //theme: ['mytheme'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
+  },
+
+  // Author information
+  presenters: [{
+    name: 'Roman Bilous',
+    company: 'Software Engineer, Railsware',
+    twitter: '@biremi',
+    www: 'http://railsware.com',
+    github: 'http://github.com/biremi',
+    slides: 'http://railsware.github.com/application-basics'
+  }/*, {
+    name: 'Second Name',
+    company: 'Job Title, Google',
+    gplus: 'http://plus.google.com/1234567890',
+    twitter: '@yourhandle',
+    www: 'http://www.you.com',
+    github: 'http://github.com/you'
+  }*/]
+};
+</script>
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+  <style>
+    span.highlight {background-color: #fff600;}
+  </style>
+</head>
+<body style="opacity: 0">
+
+
+<slides class="layout-widescreen">
+
+  <!--
+  <slide class="segue dark quote nobackground">
+    <article class="flexbox auto-fadein vcenter">
+      <q>Does it Scale?</q>
+    </article>
+  </slide>
+
+  <slide class="segue dark quote nobackground">
+    <article class="flexbox auto-fadein vcenter">
+      <q>Does it <span style="text-decoration: line-through;">Scale</span> ThreadSafe?</q>
+    </article>
+  </slide>
+  -->
+
+  <slide class="title-slide segue nobackground">
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+      <br>
+      <br>
+      <br>
+      <br>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>What we will learn today</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>X-code: tools, project structure</li>
+        <li>Application lifecycle</li>
+        <li>Storyboards</li>
+        <li>Navigation controller</li>
+        <li>Basic controls (outlets and actions)</li>
+        <li>Perform HTTP request</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Development tools: Xcode</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/xcode-struct.png" height="500" style="padding-left:150px">
+	  </img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Xcode Interface Builder</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/interface-builder.png" height="500" style="padding-left:100px">
+	  </img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Our goal today</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/app-goal.png" height="500" style="padding-left:300px">
+	  </img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: creating empty application</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/empty-app.png" height="500" style="padding-left:100px">
+	  </img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Application Lifecycle</h2>
+    </hgroup>
+    <article>
+    <article>
+	  <img src="images/app-basics/app_launch_fg_2x.png" height="500" style="padding-left:300px"></img>
+    </article>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Main Function & autoreleasepool</h2>
+    </hgroup>
+    <article>
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+int main(int argc, char *argv[])
+{
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([RWAppDelegate class]));
+    }
+}
+</pre>
+</li></ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Application Launch in Objects</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/app-launch-sequence.png" height="500" style="padding-left:10px"></img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Storyboards</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/full-storyboard.png" height="500" style="padding-left:10px"></img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Storyboard init flow</h2>
+	</hgroup>
+	<h3>If you define a main storyboard in your project, iOS automatically: </h3>
+    <article>
+      <ul>
+        <li>Creates a new window attached to the main screen.</li>
+        <li>If your app delegate implements a window property, iOS sets this property to the new window.</li>
+        <li>Loads the main storyboard referenced in the app’s information property list file.</li>
+        <li>Instantiates the main storyboard’s initial view controller</li>
+        <li>Sets the window’s rootViewController property to the new view controller.</li>
+        <li>Calls the app delegate’s application:didFinishLaunchingWithOptions: method</li>
+	  </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: creating MainStoryboard</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/create-storyboard.png" height="500" style="padding-left:100px"></img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>iOS app MVC model</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/mvc-general.png" height="500" style="padding-left:100px"></img>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>UIViewController</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Basic Building block</li>
+        <li>Manages views, data, logic</li>
+        <li>Subclass to add your application logic</li>
+	  <img src="images/app-basics/view-controller.png" width="800" style="padding-top:100px"></img>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>View controller basics: lifecycle </h2>
+    </hgroup>
+    <article>
+<pre class="prettyprint" data-lang="objective-c">
+@property (retain) UIView *view;
+</pre>
+	  <ul>
+		<li>View is lazy loaded/unloaded</li>
+		<li>After the UIViewController is initialized, viewDidLoad is called</li>
+
+<pre class="prettyprint" data-lang="objective-c">
+- (void)viewDidLoad;
+</pre>
+		<li>Just before the view appears on screen, you get notified</li>
+<pre class="prettyprint" data-lang="objective-c">
+- (void)viewWillAppear:(BOOL)animated;
+</pre>
+
+<li>Other "callbacks"</li>
+<pre class="prettyprint" data-lang="objective-c">
+- (void)viewWillDisappear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)viewDidDisappear:(BOOL)animated;
+//low memory cases
+- (void)viewDidUnload;
+</pre>
+	  </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: add view controller</h2>
+    </hgroup>
+	<article>
+	  Setting up a landing screen
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>"Mega" controllers</h2>
+    </hgroup>
+    <article>
+	  <h3>Special View Controllers that manage a collection of other MVCs</h3>
+		<br/>
+	  <ul>
+		<li><h4><b>UINavigationController</b></h4><br/>
+		 Manages a hierarchical flow of view controllers stack
+		</li>
+		<br/>
+		<li><h4><b>UITabBarController</b></h4><br/>
+		 Manages a group of independent view controlers selected using tabs on the bottom of the screen
+		</li>
+		<br/>
+		<li><h4><b>UISplitViewController</b></h4><br/>
+		 iPad
+		</li>
+	  </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>UINavigationController</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/nav-controller-objects.png" height="400" style="padding-left:200px"></img>
+	  <ul><li>
+	  <a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/UINavigationController_Class/Reference/Reference.html">Documentation</a>
+	  </li></ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>UINavigationController: API</h2>
+    </hgroup>
+    <article>
+	  <h3>Four methods are used to navigate user through the stack:<h3>
+		<ul>
+		 <li>
+		   pushViewController:animated:
+		 </li>
+		 <li>
+		   popViewControllerAnimated:
+		 </li>
+		 <li>
+		   popToRootViewControllerAnimated:
+		 </li>
+		 <li>
+		   popToViewController:animated:
+		 </li>
+		</ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: add navigation controller to storyboard</h2>
+    </hgroup>
+    <article>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>UITabBarController</h2>
+    </hgroup>
+    <article>
+	  <img src="images/app-basics/tab-bar-controller.png" height="400" style="padding-left:150px"></img>
+	  <ul><li>
+	  <a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/UITabBarController_Class/Reference/Reference.html">Documentation</a>
+	  </li></ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>UITabBarController</h2>
+    </hgroup>
+	<article>
+	  <h3>Accessing the Tab Bar Controller Properties</h3>
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+  tabBar  // property
+</pre>
+</li></ul>
+	  <h3>Managing the View Controllers</h3>
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+  viewControllers  //property
+– setViewControllers:animated:
+</pre>
+</li></ul>
+	  <h3>Managing the Selected Tab</h3> 
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+  selectedViewController  //property
+  selectedIndex  //property
+</pre>
+</li>
+</ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: add tab bar controller to storyboard</h2>
+    </hgroup>
+    <article>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Segues</h2>
+    </hgroup>
+	<article>
+     <h3>Performing the visual transition between two view controllers.</h3>
+	  <h3>Segue Attributes</h3>
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+  sourceViewController  //property
+  destinationViewController  //property
+  identifier  //property
+</pre>
+</li></ul>
+	  <h3>View Controller methods</h3>
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//less often
+- (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+</pre>
+</li></ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: segues</h2>
+    </hgroup>
+    <article>
+	  - create transition from landing to results view
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Perform http request</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>
+          Base: NSURL, NSURLRequest, NSURLConnection
+		</li>
+		<li>
+	      Serialization: NSJSONSerialization, NSXMLParser
+		</li>
+		<li>
+          Thirdparty frameworks: AFNetworking
+		</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Demo: search tweets by name</h2>
+    </hgroup>
+	<article>
+<ul><li>
+<pre class="prettyprint" data-lang="objective-c">
+NSString *baseUrl = @"https://api.twitter.com/1/users/show.json?screen_name=%@";
+NSURL *url = [NSURL URLWithString:[NSString stringWithFormat: baseUrl, userName]];
+NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+NSArray *jsonData = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+return jsonData;
+</li></ul>
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Review & Homework</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>
+		  <b>Today</b><br/>
+		  application basics, storyboards, view controllers, HTTP requests
+		</li>
+		<li>
+		  <b>Next time</b><br/>
+          views: draw, modify, properties, basic animations 
+		</li>
+		<li>
+		  <b>Homework</b><br/>
+		  table view - display fetched results in table cells
+		</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="thank-you-slide segue nobackground">
+    <article class="flexbox vleft auto-fadein">
+      <h2>&lt;Thank You!&gt;</h2>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+      <!-- populated from slide_config.json -->
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+</slides>
+</body>
+</html>
