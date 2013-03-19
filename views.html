@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UIKit / UIViews</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script type="text/javascript">
+var SLIDE_CONFIG = {
+  // Slide settings
+  settings: {
+    title: 'UIKit',
+    subtitle: 'UIView',
+    useBuilds: true, // Default: true. False will turn off slide animation builds.
+    usePrettify: true, // Default: true
+    enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.
+    enableTouch: true, // Default: true. If touch support should enabled. Note: the device must support touch.
+    //analytics: 'UA-XXXXXXXX-1', // TODO: Using this breaks GA for some reason (probably requirejs). Update your tracking code in template.html instead.
+    favIcon: '',
+    fonts: [
+      'Open Sans:regular,semibold,italic,italicsemibold',
+      'Inconsolata'
+    ],
+    //theme: ['mytheme'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
+  },
+
+  // Author information
+  presenters: [{
+    name: 'Sergey Korolev, inspired (copy&paste) by Apple\'s presentation',
+    company: 'Software Engineer, Railsware',
+    twitter: '@sk_dn',
+    www: 'http://railsware.com',
+    github: 'http://github.com/SergeyKorolev',
+    slides: 'http://railsware.github.com/views'
+  }/*, {
+    name: 'Second Name',
+    company: 'Job Title, Google',
+    gplus: 'http://plus.google.com/1234567890',
+    twitter: '@yourhandle',
+    www: 'http://www.you.com',
+    github: 'http://github.com/you'
+  }*/]
+};
+</script>
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+  <style>
+    span.highlight {background-color: #fff600;}
+  </style>
+</head>
+<body style="opacity: 0">
+
+
+<slides class="layout-widescreen">
+
+  <!--
+  <slide class="segue dark quote nobackground">
+    <article class="flexbox auto-fadein vcenter">
+      <q>Does it Scale?</q>
+    </article>
+  </slide>
+
+  <slide class="segue dark quote nobackground">
+    <article class="flexbox auto-fadein vcenter">
+      <q>Does it <span style="text-decoration: line-through;">Scale</span> ThreadSafe?</q>
+    </article>
+  </slide>
+  -->
+
+  <slide class="title-slide segue nobackground">
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+      <br>
+      <br>
+      <br>
+      <br>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2></h2>
+      <h2>UIKit</h2>
+	  <a href="http://developer.apple.com/library/ios/#documentation/UIKit/Reference/UIKit_Framework/_index.html">Documentation</a>
+    </hgroup>
+    <article>
+	<p style="line-height:32px;">
+ The UIKit framework provides the classes needed to construct and manage an application’s user interface for iOS. It provides an application object, event handling, drawing model, windows, views, and controls specifically designed for a touch screen interface. 
+	</p>
+	<p style="line-height:32px;">
+		
+	</p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>View Fundamentals</h2>
+	  	  <a href="http://goo.gl/uU5Yh">Documentation</a>
+    </hgroup>
+    <article>		
+        <ul style="line-height:20px; font-size:20px;">
+          <li>Rectangular area on screen</li>
+          <li>Draws content</li>
+          <li>Handles events</li>
+		  <li>Subclass of UIResponder (event handling class)</li>
+		  <li>Views arranged hierarchically</li>
+		  <ul> 
+			  <li>every view has one superview</li>
+			  <li>every view has zero or more subviews</li>
+		  </ul>		  
+        </ul>				
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>View Hierarchy - UIWindow</h2>
+	  	  <a href="http://goo.gl/0RgMV">Documentation</a>
+    </hgroup>
+    <article>		
+        <ul style="line-height:20px; font-size:20px;">
+          <li>Views live inside of a window</li>
+		  <li>UIWindow is actually just a view</li>
+		  <ul> 
+			  <li>adds some additional functionality specific to top level view</li>
+		  </ul>		  
+		  <li>One UIWindow for an iPhone app</li>
+		  <ul> 
+			  <li>Contains the entire view hierarchy</li>
+			  <li>Set up by default in Xcode template project</li>
+		  </ul>
+        </ul>				
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>View Hierarchy - Manipulation</h2>
+    </hgroup>
+    <article>
+		<p>Add/remove views in IB or using UIView methods</p>
+		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+			- (void)addSubview:(UIView *)view;
+			- (void)removeFromSuperview;			
+		</pre>
+		
+		<p>Manipulate the view hierarchy manually</p>
+		<pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+			- (void)insertSubview:(UIView *)view atIndex:(int)index;
+			- (void)insertSubview:(UIView *)view belowSubview:(UIView *)view;
+			- (void)insertSubview:(UIView *)view aboveSubview:(UIView *)view;
+			- (void)exchangeSubviewAtIndex:(int)index withSubviewAtIndex:(int)otherIndex;		
+		</pre>
+    </article>
+  </slide>
+  
+  
+  <slide>
+    <hgroup>
+      <h2>View Hierarchy - Ownership</h2>
+    </hgroup>
+    <article>		
+        <ul style="line-height:20px; font-size:20px;">
+          <li>Superviews retain their subviews</li>
+		  <li>Not uncommon for views to only be retained by superview</li>
+		  <ul> 
+			  <li>Be careful when removing!</li>
+			  <li>Retain subview before removing if you want to reuse it</li>
+		  </ul>		  
+		  <li>Views can be temporarily hidden</li>
+		  <ul> 
+			  <li>
+				  <pre class="prettyprint" data-lang="objective-c" style="font-size:18px; font-weight:bold; line-height:21px;">
+				  theView.hidden = YES;
+				  </pre>
+			  </li>
+		  </ul>
+        </ul>				
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>Rects, Points and Sizes</h2>
+    </hgroup>
+    <article>		
+		<img src="images/views/structures.png"/>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Location and Size</h2>
+    </hgroup>
+    <article>		
+        <ul style="line-height:20px; font-size:20px;">
+          <li>View’s location and size expressed in two ways</li>
+		  <ul> 
+			  <li>Frame is in superview’s coordinate system</li>
+			  <li>Bounds is in local coordinate system</li>
+		  </ul>		
+		  <li>View A frame: origin: (0, 0) size: (550 x 400) | View A bounds: origin: (0, 0) size: (550 x 400)</li>
+		  <li>View B frame: origin: (200, 100) size: (200 x 250) | View B bounds: origin: (0, 0) size: (200 x 250)</li>
+        </ul>		
+		
+		<img src="images/views/frame_a_and_b.png"/>
+  </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Frame and Bounds</h2>
+    </hgroup>
+    <article>		
+        <ul style="line-height:20px; font-size:20px;">
+          <li>Which to use?</li>
+		  <ul> 
+			  <li>Usually depends on the context</li>
+		  </ul>		
+		  <li>If you are using a view, typically you use frame</li>
+		  <li>If you are implementing a view, typically you use bounds</li>
+		  <li>Matter of perspective</li>
+		  <ul> 
+			  <li>From outside it’s usually the frame</li>
+			  <li>From inside it’s usually the bounds</li>
+		  </ul>		
+		  <li>Examples:</li>
+		  <ul> 
+			  <li>Creating a view, positioning a view in superview - use frame</li>
+			  <li>Handling events, drawing a view - use bounds</li>
+		  </ul>		
+        </ul>		
+	</article>
+  </slide>
+
+  <slide>
+    <hgroup>
+    </hgroup>
+    <article>		
+		<p style="font-size:80px;">
+			Demo
+		</p>
+	</article>
+  </slide>
+  
+  
+
+<slide class="backdrop"></slide>
+</slides>
+</body>
+</html>
